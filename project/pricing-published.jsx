@@ -137,12 +137,12 @@ const SharedPlansCard = ({
 
 };
 
-const PublishedPricing = ({ showMandatorySteps = false, priceDisplay = "stacked", subsDisplay = "chip", onCreateDraft, view, onView }) => {
+const PublishedPricing = ({ showMandatorySteps = false, priceDisplay = "stacked", subsDisplay = "chip", onCreateDraft }) => {
   const [historyOpen, setHistoryOpen] = usePubState(false);
 
   return (
     <>
-      <Topbar view={view} onView={onView} />
+      <Topbar />
       <div className={`page${!showMandatorySteps ? " page--published" : ""}`}>
         <Sidebar pricingHasWarning={false} published={true} />
         <main className="main-card published-view">
@@ -460,7 +460,7 @@ const RowMenu = ({ items }) => {
 
 };
 
-const PricingDraftView = ({ priceDisplay = "stacked", subsDisplay = "chip", isFirstPublish = false, onCancel, onPublish, view, onView }) => {
+const PricingDraftView = ({ priceDisplay = "stacked", subsDisplay = "chip", isFirstPublish = false, onCancel, onPublish }) => {
   // Pre-populate from live data — keep status + subscribers so the user can
   // decide what to deprecate / keep live in the new version.
   const [draftPlans, setDraftPlans] = usePubState(() => [
@@ -557,7 +557,7 @@ const PricingDraftView = ({ priceDisplay = "stacked", subsDisplay = "chip", isFi
 
   return (
     <>
-      <Topbar view={view} onView={onView} />
+      <Topbar />
       <div className="page page--draft-focus">
         <main className="main-card published-view" style={{ borderColor: "rgb(229, 229, 229)" }}>
 

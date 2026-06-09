@@ -180,6 +180,15 @@ const App = () => {
   const tweaksPanel =
   <TweaksPanel>
       <TweakSection label="State" />
+      <TweakRadio
+      label="View"
+      value={tweaks.viewState}
+      onChange={(v) => setTweak('viewState', v)}
+      options={[
+        { value: "setup", label: "Setup" },
+        { value: "live",  label: "Live"  },
+        { value: "draft", label: "Draft" },
+      ]} />
       <TweakToggle
       label="Mandatory steps"
       value={tweaks.showMandatorySteps}
@@ -232,9 +241,7 @@ const App = () => {
           showMandatorySteps={tweaks.showMandatorySteps}
           priceDisplay={tweaks.priceDisplay}
           subsDisplay={tweaks.subsDisplay}
-          onCreateDraft={() => setTweak('viewState', 'draft')}
-          view={tweaks.viewState}
-          onView={(v) => setTweak('viewState', v)} />
+          onCreateDraft={() => setTweak('viewState', 'draft')} />
         
         {tweaksPanel}
       </>);
@@ -249,9 +256,7 @@ const App = () => {
           subsDisplay={tweaks.subsDisplay}
           isFirstPublish={tweaks.firstPublish}
           onCancel={() => setTweak('viewState', 'live')}
-          onPublish={() => setTweak('viewState', 'live')}
-          view={tweaks.viewState}
-          onView={(v) => setTweak('viewState', v)} />
+          onPublish={() => setTweak('viewState', 'live')} />
         
         {tweaksPanel}
       </>);
@@ -260,7 +265,7 @@ const App = () => {
 
   return (
     <>
-      <Topbar view={tweaks.viewState} onView={(v) => setTweak('viewState', v)} />
+      <Topbar />
       <div className={`page${!tweaks.showMandatorySteps ? " page--published" : ""}`}>
         <Sidebar pricingHasWarning={pricingHasWarning} />
         <main className="main-card" data-comment-anchor="4ba964bc17-main-265-9">
