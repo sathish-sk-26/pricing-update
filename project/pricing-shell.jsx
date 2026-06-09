@@ -3,9 +3,25 @@
 
 const { useState } = React;
 
-const Topbar = () => (
+const Topbar = ({ view, onView }) => (
   <header className="topbar">
     <a className="brand"><IcLock/>Marketplace</a>
+    {view && (
+      <div className="view-switch" role="tablist" aria-label="Pricing view">
+        {[["setup", "Setup"], ["live", "Live"], ["draft", "Draft"]].map(([v, label]) => (
+          <button
+            key={v}
+            type="button"
+            role="tab"
+            aria-selected={view === v}
+            className={`vs-opt${view === v ? " active" : ""}`}
+            onClick={() => onView && onView(v)}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+    )}
     <nav className="nav">
       <a>App dashboard</a>
       <a>Testing</a>

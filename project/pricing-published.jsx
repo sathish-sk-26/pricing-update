@@ -102,19 +102,19 @@ const SharedPlansCard = ({
                   p.status === "deprecated" ? "Deprecated" :
                   "Draft"
                   } />
-                      {p.status === "deprecated" && p.deprecationPolicy && (
-                        <span
-                          className="policy-chip"
-                          title={
-                            p.deprecationPolicy === "grandfather"
-                              ? "Existing subscribers keep their plan and price indefinitely. No migration notices."
-                              : "Subscribers notified at T+0 and T+30; they choose their new plan. No auto-migration."
-                          }
-                        >
-                          {p.deprecationPolicy === "grandfather" ? <IcShield/> : <IcBell/>}
+                      {p.status === "deprecated" && p.deprecationPolicy &&
+                <span
+                  className="policy-chip"
+                  title={
+                  p.deprecationPolicy === "grandfather" ?
+                  "Existing subscribers keep their plan and price indefinitely. No migration notices." :
+                  "Subscribers notified at T+0 and T+30; they choose their new plan. No auto-migration."
+                  }>
+                  
+                          {p.deprecationPolicy === "grandfather" ? <IcShield /> : <IcBell />}
                           {p.deprecationPolicy === "grandfather" ? "Grandfathered" : "Notify · T+30"}
                         </span>
-                      )}
+                }
                     </div>
                   </td>
             }
@@ -137,12 +137,12 @@ const SharedPlansCard = ({
 
 };
 
-const PublishedPricing = ({ showMandatorySteps = false, priceDisplay = "stacked", subsDisplay = "chip", onCreateDraft }) => {
+const PublishedPricing = ({ showMandatorySteps = false, priceDisplay = "stacked", subsDisplay = "chip", onCreateDraft, view, onView }) => {
   const [historyOpen, setHistoryOpen] = usePubState(false);
 
   return (
     <>
-      <Topbar />
+      <Topbar view={view} onView={onView} />
       <div className={`page${!showMandatorySteps ? " page--published" : ""}`}>
         <Sidebar pricingHasWarning={false} published={true} />
         <main className="main-card published-view">
@@ -230,7 +230,7 @@ const SharedMetersCard = ({ mode, meters, onAdd, onEdit, onDelete, priceDisplay 
     const from = Number(fromRaw);
     const to = Number(toRaw);
     if (!Number.isFinite(from) || !Number.isFinite(to) || from === 0) return null;
-    return ((to - from) / from) * 100;
+    return (to - from) / from * 100;
   };
   return (
     <div className="pub-card">
@@ -269,27 +269,27 @@ const SharedMetersCard = ({ mode, meters, onAdd, onEdit, onDelete, priceDisplay 
                   {m.subs != null && subsDisplay === "inline" && <> · {m.subs} subscribers</>}
                 </div>
                 {isDraft && m.pendingChange && (() => {
-                  const pct = pctChange(m.pendingChange.fromRaw, m.pendingChange.toRaw);
-                  const deltaClass = pct == null ? "" : pct > 0 ? "is-up" : pct < 0 ? "is-down" : "is-flat";
-                  const deltaLabel = pct == null
-                    ? null
-                    : pct === 0 ? "No change" : `${pct > 0 ? "+" : ""}${pct.toFixed(pct % 1 === 0 ? 0 : 1)}%`;
-                  return (
-                    <div className="pending-change-row">
+              const pct = pctChange(m.pendingChange.fromRaw, m.pendingChange.toRaw);
+              const deltaClass = pct == null ? "" : pct > 0 ? "is-up" : pct < 0 ? "is-down" : "is-flat";
+              const deltaLabel = pct == null ?
+              null :
+              pct === 0 ? "No change" : `${pct > 0 ? "+" : ""}${pct.toFixed(pct % 1 === 0 ? 0 : 1)}%`;
+              return (
+                <div className="pending-change-row" data-comment-anchor="9c44419d11-div-278-21">
                       <span className="pending-change-was">
                         Was {fmtMoney(m.pendingChange.fromRaw)}
                       </span>
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><line x1="5" y1="12" x2="19" y2="12" /><polyline points="13 6 19 12 13 18" /></svg>
                       <span className="pending-change-new">
                         {fmtMoney(m.pendingChange.toRaw)}
                       </span>
-                      {deltaLabel && (
-                        <span className={`pending-change-delta ${deltaClass}`}>{deltaLabel}</span>
-                      )}
+                      {deltaLabel &&
+                  <span className={`pending-change-delta ${deltaClass}`}>{deltaLabel}</span>
+                  }
                       <span className="pending-change-eff">Effective {m.pendingChange.effectiveDate}</span>
-                    </div>
-                  );
-                })()}
+                    </div>);
+
+            })()}
               </div>
               {m.subs != null && subsDisplay === "stat" &&
           <div className="subs-stat">
@@ -388,8 +388,8 @@ const SharedMetersCard = ({ mode, meters, onAdd, onEdit, onDelete, priceDisplay 
           <div className="row-actions">
                   <button className="edit" aria-label="Edit meter" onClick={() => onEdit && onEdit(m)}><IcEdit /></button>
                   {(m.subs || 0) === 0 &&
-              <button className="del" aria-label="Delete meter" title="Delete meter" onClick={() => onDelete && onDelete(m)}><IcTrash /></button>
-              }
+            <button className="del" aria-label="Delete meter" title="Delete meter" onClick={() => onDelete && onDelete(m)}><IcTrash /></button>
+            }
                 </div>
           }
             </div>
@@ -460,7 +460,7 @@ const RowMenu = ({ items }) => {
 
 };
 
-const PricingDraftView = ({ priceDisplay = "stacked", subsDisplay = "chip", isFirstPublish = false, onCancel, onPublish }) => {
+const PricingDraftView = ({ priceDisplay = "stacked", subsDisplay = "chip", isFirstPublish = false, onCancel, onPublish, view, onView }) => {
   // Pre-populate from live data — keep status + subscribers so the user can
   // decide what to deprecate / keep live in the new version.
   const [draftPlans, setDraftPlans] = usePubState(() => [
@@ -531,31 +531,33 @@ const PricingDraftView = ({ priceDisplay = "stacked", subsDisplay = "chip", isFi
 
   // Publish-confirmation modal
   const [publishOpen, setPublishOpen] = usePubState(false);
+  // Draft preview modal
+  const [previewOpen, setPreviewOpen] = usePubState(false);
 
   // ── Diff vs. last published config ────────────────
   // Baseline = PUB_PLANS / PUB_METERS at the top of this file.
   const baselinePlanNames = new Set(PUB_PLANS.map((p) => p.name));
-  const newPlans = draftPlans
-    .filter((p) => !baselinePlanNames.has(p.name))
-    .map((p) => ({ name: p.name }));
-  const deprecatedPlans = draftPlans
-    .filter((p) => p.status === "deprecated")
-    .map((p) => ({
-      name: p.name,
-      subs: p.subs || 0,
-      policy: p.deprecationPolicy === "grandfather" ? "grandfather" : "notify",
-    }));
-  const meterChanges = draftMeters
-    .filter((m) => m.pendingChange)
-    .map((m) => ({
-      name: m.name,
-      fromRaw: m.pendingChange.fromRaw,
-      toRaw: m.pendingChange.toRaw,
-    }));
+  const newPlans = draftPlans.
+  filter((p) => !baselinePlanNames.has(p.name)).
+  map((p) => ({ name: p.name }));
+  const deprecatedPlans = draftPlans.
+  filter((p) => p.status === "deprecated").
+  map((p) => ({
+    name: p.name,
+    subs: p.subs || 0,
+    policy: p.deprecationPolicy === "grandfather" ? "grandfather" : "notify"
+  }));
+  const meterChanges = draftMeters.
+  filter((m) => m.pendingChange).
+  map((m) => ({
+    name: m.name,
+    fromRaw: m.pendingChange.fromRaw,
+    toRaw: m.pendingChange.toRaw
+  }));
 
   return (
     <>
-      <Topbar />
+      <Topbar view={view} onView={onView} />
       <div className="page page--draft-focus">
         <main className="main-card published-view" style={{ borderColor: "rgb(229, 229, 229)" }}>
 
@@ -579,7 +581,7 @@ const PricingDraftView = ({ priceDisplay = "stacked", subsDisplay = "chip", isFi
             <div className="pub-header-actions">
               <button
                 className="btn btn-ghost pub-preview-btn"
-                onClick={() => window.open(window.location.pathname + '?view=live', "_blank")}
+                onClick={() => setPreviewOpen(true)}
                 title="Open a read-only preview of this draft">
                 
                 <IcEye /> Preview
@@ -699,8 +701,20 @@ const PricingDraftView = ({ priceDisplay = "stacked", subsDisplay = "chip", isFi
         newPlans={newPlans}
         deprecatedPlans={deprecatedPlans}
         meterChanges={meterChanges}
-        onConfirm={() => { setPublishOpen(false); onPublish(); }}
+        onConfirm={() => {setPublishOpen(false);onPublish();}}
         onClose={() => setPublishOpen(false)} />
+
+      }
+      {previewOpen &&
+      <PreviewDraftModal
+        version="v3 pricing"
+        plans={draftPlans}
+        meters={draftMeters}
+        newPlans={newPlans}
+        deprecatedPlans={deprecatedPlans}
+        meterChanges={meterChanges}
+        onPublish={() => {setPreviewOpen(false);setPublishOpen(true);}}
+        onClose={() => setPreviewOpen(false)} />
 
       }
     </>);
