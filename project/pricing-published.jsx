@@ -579,7 +579,7 @@ const PricingDraftView = ({ priceDisplay = "stacked", subsDisplay = "chip", isFi
             <div className="pub-header-actions">
               <button
                 className="btn btn-ghost pub-preview-btn"
-                onClick={() => window.open(window.location.pathname, "_blank")}
+                onClick={() => window.open(window.location.pathname + '?view=live', "_blank")}
                 title="Open a read-only preview of this draft">
                 
                 <IcEye /> Preview

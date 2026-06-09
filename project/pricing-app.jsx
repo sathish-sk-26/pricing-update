@@ -3,6 +3,10 @@
 
 const { useState, useMemo } = React;
 
+// Allow ?view=live|setup|draft to set the initial view (used by the Preview button)
+const _urlView = new URLSearchParams(window.location.search).get('view');
+const _isPreviewMode = !!_urlView;
+
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "viewState": "setup",
   "showMandatorySteps": true,
@@ -10,6 +14,9 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "subsDisplay": "inline",
   "firstPublish": false
 }/*EDITMODE-END*/;
+
+// Override viewState from URL if present
+if (_urlView) TWEAK_DEFAULTS.viewState = _urlView;
 
 const initialPlans = [
   { id: "p1", name: "Free Plan",                          charge: "Free",    agency: "Free",    subacct: "—",     subs: "—", status: "draft" },
