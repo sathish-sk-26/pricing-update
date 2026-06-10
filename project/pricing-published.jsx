@@ -610,7 +610,7 @@ const PricingDraftView = ({ priceDisplay = "stacked", subsDisplay = "chip", isFi
                 </button>;
 
               const menuItems = [
-              { label: "Copy plan",
+              { label: "Duplicate plan",
                 icon: <IcCopy />,
                 onSelect: () => setPlanModal({
                   mode: "copy",
